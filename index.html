@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Connecting Remotion…</title></head>
+<body>
+<p>Redirecting back to Remotion…</p>
+<script>
+  const code = new URLSearchParams(window.location.search).get('code');
+  const error = new URLSearchParams(window.location.search).get('error');
+  if (code) {
+    window.location.href = 'remotion://callback?code=' + code;
+  } else {
+    document.body.innerHTML = '<p>Error: ' + (error || 'unknown') + '</p>';
+  }
+</script>
+</body>
+</html>
