@@ -5,12 +5,16 @@
 <script>
   const code = new URLSearchParams(window.location.search).get('code');
   const error = new URLSearchParams(window.location.search).get('error');
-  if (error) { document.body.innerHTML = '<p>Error: ' + error + '</p>'; }
-  else if (code) {
+  if (error) {
+    document.body.innerHTML = '<p>Error: ' + error + '</p>';
+  } else if (code) {
     fetch('/api/token?code=' + code)
       .then(r => r.json())
-      .then(d => { window.location.href = 'remotion://callback?token=' + d.token; })
-      .catch(() => { document.body.innerHTML = '<p>Exchange failed.</p>'; });
+      .then(d => {
+        if (d.token) window.location.href = 'remotion://callback?token=' + d.token;
+        else document.body.innerHTML = '<p>Exchange failed: ' + (d.error || 'unknown') + '</p>';
+      })
+      .catch(e => { document.body.innerHTML = '<p>Network error.</p>'; });
   }
 </script>
 </body>
