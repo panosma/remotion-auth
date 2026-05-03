@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head><title>Connecting Remotion…</title></head>
-<body>
-<p>Redirecting back to Remotion…</p>
+<body><p>Connecting…</p>
 <script>
   const code = new URLSearchParams(window.location.search).get('code');
   const error = new URLSearchParams(window.location.search).get('error');
-  if (code) {
-    window.location.href = 'remotion://callback?code=' + code;
-  } else {
-    document.body.innerHTML = '<p>Error: ' + (error || 'unknown') + '</p>';
+  if (error) { document.body.innerHTML = '<p>Error: ' + error + '</p>'; }
+  else if (code) {
+    fetch('/api/token?code=' + code)
+      .then(r => r.json())
+      .then(d => { window.location.href = 'remotion://callback?token=' + d.token; })
+      .catch(() => { document.body.innerHTML = '<p>Exchange failed.</p>'; });
   }
 </script>
 </body>
