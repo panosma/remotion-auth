@@ -1,5 +1,8 @@
 export default async function handler(req, res) {
   const { code } = req.query;
+  
+  if (!code) return res.status(400).json({ error: 'No code provided' });
+
   const creds = Buffer.from(
     `${process.env.NOTION_CLIENT_ID}:${process.env.NOTION_CLIENT_SECRET}`
   ).toString('base64');
@@ -19,9 +22,15 @@ export default async function handler(req, res) {
   });
 
   const data = await r.json();
+  
+  // Return full Notion response for debugging
   if (data.access_token) {
     res.json({ token: data.access_token });
   } else {
-    res.status(400).json({ error: data.error || 'Exchange failed' });
+    res.status(400).json({ 
+      error: data.error,
+      error_description: data.error_description,
+      redirect_uri_used: process.env.REDIRECT_URI  // shows exactly what was sent
+    });
   }
 }
