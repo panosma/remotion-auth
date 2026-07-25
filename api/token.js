@@ -44,7 +44,7 @@ export default async function handler(req, res) {
 
   if (data.access_token) {
     // Redirect the browser back to the app
-    return res.redirect(302, `remotion://callback?token=${data.access_token}`);
+    return res.redirect(302, `kando://callback?token=${data.access_token}`);
   }
 
   return res.status(400).json({
