@@ -15,9 +15,6 @@ export default async function handler(req, res) {
 
   const creds = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
-  console.log('[token] code:', code.slice(0, 8) + '…');
-  console.log('[token] redirect_uri being sent:', redirectUri);
-
   let r;
   try {
     r = await fetch('https://api.notion.com/v1/oauth/token', {
@@ -39,8 +36,6 @@ export default async function handler(req, res) {
   }
 
   const data = await r.json();
-  console.log('[token] notion response status:', r.status);
-  console.log('[token] notion response body:', JSON.stringify(data));
 
   if (data.access_token) {
     // Redirect the browser back to the app
